@@ -1,5 +1,21 @@
 # FeedToCSV
 
+# Archive.org Import
+
+## Python internet archive module
+* https://github.com/jjjake/internetarchive
+* https://internetarchive.readthedocs.io/en/latest/
+
+## Search
+You can use ia search to create an itemlist, scoped to a collection:
+
+`$ ia search 'collection:glasgowschoolofart' --itemlist > itemlist.txt`
+
+API interface - See: https://internetarchive.readthedocs.io/en/latest/api.html#searching-items
+
+## File download
+https://internetarchive.readthedocs.io/en/latest/api.html#downloading
+
 ## Archive.org URL structure
 
 ### An item’s “details” page will always be available at
