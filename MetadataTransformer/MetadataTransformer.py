@@ -9,8 +9,8 @@ class MetadataTransformer:
             self._transform_row(row)
 
     def _transform_row(self, row):
-
         result = {}
+
         for key in self.mapping():
             if callable(self.mapping[key]):
                 result[key] = self.mapping[key](row)
