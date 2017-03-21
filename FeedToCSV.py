@@ -6,3 +6,4 @@ writer = CSVDictWriter('output/ia-atguelph.csv')
 transformer = IAMetadataTransformer()
 consumer = IAConsumer(transformer=transformer, writer=writer, collection='atguelph')
 
+consumer.process()
