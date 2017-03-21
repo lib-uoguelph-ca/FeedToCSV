@@ -6,10 +6,8 @@ class IAConsumer(Consumer):
     def __init__(self, transformer, writer, collection):
         #super().__init__(transformer, writer)
         self.collection = collection
-        self.items = [
-            "p1atguelphvol31uofg",
-            "p2atguelphvol31uofg",
-        ]
+        self.session = ia.get_session(config_file='ia.ini')
+        self.item_ids = self._search()
 
     def process(self):
         pass
@@ -22,6 +20,12 @@ class IAConsumer(Consumer):
 
     def _search(self):
         query = "collection:{}".format(self.collection)
-        result = ia.search_items(query)
+        result = ia.search_items(query, archive_session=self.session)
+
+        items = []
+        for item in result:
+            items.append(item['identifier'])
+
+        return items
 
 

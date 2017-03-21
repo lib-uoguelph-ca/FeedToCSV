@@ -4,6 +4,5 @@ from transformer.ia_metadata_transformer import IAMetadataTransformer
 
 writer = CSVDictWriter('output/ia-atguelph.csv')
 transformer = IAMetadataTransformer()
-consumer = IAConsumer(transformer = transformer, writer=writer, collection='atguelph')
-
+consumer = IAConsumer(transformer=transformer, writer=writer, collection='atguelph')
 

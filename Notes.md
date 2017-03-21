@@ -6,6 +6,21 @@
 * https://github.com/jjjake/internetarchive
 * https://internetarchive.readthedocs.io/en/latest/
 
+## Sessions
+Some functionality requires an active session. Sessions are loaded from a config file.
+You can create the config file like so:
+```
+from internetarchive import configure
+configure('user@example.com', 'password', config_file='ia.ini')
+```
+
+Once you've done that, load your session data:
+
+```
+from internetarchive import get_session
+s = get_session(config_file='ia.ini')
+```
+
 ## Search
 You can use ia search to create an itemlist, scoped to a collection:
 
