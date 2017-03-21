@@ -1,2 +1,4 @@
 venv
 .idea
+ia.ini
+*.pyc
