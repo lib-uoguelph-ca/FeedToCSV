@@ -1,6 +1,6 @@
 import csv
 import os.path
-from . import CSVWriter
+from .csv_writer import CSVWriter
 
 class CSVDictWriter(CSVWriter):
 
