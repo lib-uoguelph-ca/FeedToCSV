@@ -2,6 +2,7 @@ import os
 import threading
 import urllib.request
 import queue
+from time import sleep
 
 from queue import Queue
 

@@ -27,7 +27,11 @@ class IAConsumer(Consumer):
             item = self._get_item_metadata(id)
             self._download_files(id)
             # TODO: Write the metadata to a CSV file.
+        self._cleanup()
+
+    def _cleanup(self):
         self.downloader.stop()
+        self.session.close()
 
     # Get and build a dictionary of metadata values for an item.
     def _get_item_metadata(self, item_id):
