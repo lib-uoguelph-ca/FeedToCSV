@@ -1,5 +1,7 @@
 from .consumer import Consumer
 import internetarchive as ia
+from downloader.threaded_downloader import ThreadedDownloader
+from downloader.ia_downloader_thread import IADownloaderThread
 
 class IAConsumer(Consumer):
 
@@ -8,12 +10,26 @@ class IAConsumer(Consumer):
         self.collection = collection
         self.session = ia.get_session(config_file='ia.ini')
         self.item_ids = self._search()
+        #TODO: Remove this...
+        self.item_ids = ['p1atguelphvol43uofg', 'p2atguelphvol43uofg']
+        self.downloader = self._start_downloader(IADownloaderThread)
 
+    # Instantiate threaded downloader
+    def _start_downloader(self, downloader_thread_class):
+        return ThreadedDownloader(num_threads=1, thread_class=downloader_thread_class, output_dir="output")
+
+    # Iterate through the items,
+    # * Build the metadata
+    # * Write metadata to an output file
+    # * Dowload the files associated with each item.
     def process(self):
         for id in self.item_ids:
             item = self._get_item_metadata(id)
             self._download_files(id)
+            # TODO: Write the metadata to a CSV file.
+        self.downloader.stop()
 
+    # Get and build a dictionary of metadata values for an item.
     def _get_item_metadata(self, item_id):
         item = ia.get_item(item_id, archive_session=self.session)
         metadata = item.metadata
@@ -24,24 +40,31 @@ class IAConsumer(Consumer):
 
         return metadata
 
-    def _download_files(self, item_id, output_path="./output"):
+    # Download the files associated with an item.
+    def _download_files(self, item_id):
         files = self._get_item_files(item_id)
         for file in files:
-            self._download_file(file, output_path)
+            self._download_file(file)
 
-    def _download_file(self, file, output_path="./output"):
-        file.download(destdir=output_path)
+    # Add the file to the queue of objects we need to download
+    def _download_file(self, file):
+        queue = self.downloader.get_queue()
+        print("Add file to queue {}".format(file))
+        queue.put(file)
 
-    def _get_item_files(self, item_id, glob_pattern="*.pdf"):
+    # Get the list of files associated with an item
+    def _get_item_files(self, item_id, glob_pattern="*.pdf|*.txt"):
         files_generator = ia.get_files(item_id, archive_session=self.session, glob_pattern=glob_pattern)
         files = [file for file in files_generator]
         return files
 
-    def _get_item_file_names(self, item_id, glob_pattern="*.pdf"):
+    # Get a list of file names associated with an item
+    def _get_item_file_names(self, item_id, glob_pattern="*.pdf|*.txt"):
         files_generator = ia.get_files(item_id, archive_session=self.session, glob_pattern=glob_pattern)
         files = [file.name for file in files_generator]
         return files
 
+    # Search for items in a collection and return a list of item identifiers
     def _search(self):
         query = "collection:{}".format(self.collection)
         result = ia.search_items(query, archive_session=self.session)

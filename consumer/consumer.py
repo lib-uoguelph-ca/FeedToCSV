@@ -1,5 +1,5 @@
 class Consumer:
-    def __init__(self, transformer, writer):
+    def __init__(self, transformer, writer, output_dir="output"):
         self.transformer = transformer
         self.writer = writer
 
