@@ -16,7 +16,7 @@ class IAConsumer(Consumer):
 
     # Instantiate threaded downloader
     def _start_downloader(self, downloader_thread_class):
-        return ThreadedDownloader(num_threads=1, thread_class=downloader_thread_class, output_dir="output")
+        return ThreadedDownloader(num_threads=2, thread_class=downloader_thread_class, output_dir="output")
 
     # Iterate through the items,
     # * Build the metadata
@@ -49,7 +49,6 @@ class IAConsumer(Consumer):
     # Add the file to the queue of objects we need to download
     def _download_file(self, file):
         queue = self.downloader.get_queue()
-        print("Add file to queue {}".format(file))
         queue.put(file)
 
     # Get the list of files associated with an item

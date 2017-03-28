@@ -1,7 +1,7 @@
 import os
 import threading
 import urllib.request
-from time import sleep
+import queue
 
 from queue import Queue
 
@@ -12,24 +12,31 @@ from queue import Queue
 
 class URLDownloaderThread(threading.Thread):
 
-    def __init__(self, queue, output_dir=None):
+    def __init__(self, id, queue, output_dir=None):
         """Initialize the thread"""
         threading.Thread.__init__(self)
         self.queue = queue
         self.output_dir = output_dir
         self.stoprequest = threading.Event()
+        self.id = id
 
     def run(self):
         while not self.stoprequest.isSet():
-            url = self.queue.get()
+            # Check if we're supposed to stop
+            if self.stoprequest.is_set():
+                self.join()
+
+            try:
+                url = self.queue.get(timeout=0.5)
+            except queue.Empty:
+                continue
             self._download_file(url)
 
             # send a signal to the queue that the job is done
             self.queue.task_done()
 
-    def join(self, timeout=None):
+    def stop(self):
         self.stoprequest.set()
-        super(URLDownloaderThread, self).join(timeout)
 
     def _download_file(self, url):
         handle = urllib.request.urlopen(url)
@@ -69,15 +76,14 @@ class ThreadedDownloader:
 
     def _init_threads(self):
         for i in range(self.num_threads):
-            thread = self.thread_class(self.queue, self.output_dir)
+            thread = self.thread_class(i, self.queue, self.output_dir)
             self.threads.append(thread)
             thread.start()
 
     def stop(self):
-        while not self.queue.empty():
-            sleep(1)
+        self.queue.join() # Blocks until all unfinished items have been processed.
         self._cleanup()
 
     def _cleanup(self):
         for thread in self.threads:
-            thread.join()
+            thread.stop()
