@@ -5,18 +5,20 @@ from downloader.ia_downloader_thread import IADownloaderThread
 
 class IAConsumer(Consumer):
 
-    def __init__(self, transformer, writer, collection):
+    def __init__(self, transformer, writer, collection, num_threads=4, output_dir="output"):
         #super().__init__(transformer, writer)
         self.collection = collection
         self.session = ia.get_session(config_file='ia.ini')
         self.item_ids = self._search()
+        self.num_threads = num_threads
+        self.output_dir = output_dir
         #TODO: Remove this...
         self.item_ids = ['p1atguelphvol43uofg', 'p2atguelphvol43uofg']
         self.downloader = self._start_downloader(IADownloaderThread)
 
     # Instantiate threaded downloader
     def _start_downloader(self, downloader_thread_class):
-        return ThreadedDownloader(num_threads=2, thread_class=downloader_thread_class, output_dir="output")
+        return ThreadedDownloader(num_threads=self.num_threads, thread_class=downloader_thread_class, output_dir=self.output_dir)
 
     # Iterate through the items,
     # * Build the metadata

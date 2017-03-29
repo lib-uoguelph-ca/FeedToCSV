@@ -9,6 +9,7 @@ This thread impelents the pattern for stopping outlined here:
 
 
 class IADownloaderThread(threading.Thread):
+    retries = 3
 
     def __init__(self, id, queue, output_dir=None):
         threading.Thread.__init__(self)
@@ -38,6 +39,6 @@ class IADownloaderThread(threading.Thread):
         self.stoprequest.set()
 
     def _download_file(self, file):
-        file.download(destdir=self.output_dir)
+        file.download(destdir=self.output_dir, retries=self.retries, checksum=True)
         msg = "Thread {id}: Downloaded {file}!".format(id=self.id, file=file.name)
         print(msg)
