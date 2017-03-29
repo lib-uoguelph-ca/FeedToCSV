@@ -21,10 +21,7 @@ class IADownloaderThread(threading.Thread):
 
 
     def run(self):
-        while not self.stoprequest.isSet():
-            if self.stoprequest.is_set():
-                self.join()
-
+        while not self.stoprequest.is_set():
             try:
                 file = self.queue.get(timeout=0.5)
             except queue.Empty:
@@ -35,10 +32,13 @@ class IADownloaderThread(threading.Thread):
             # send a signal to the queue that the job is done
             self.queue.task_done()
 
+    """
+    Public method to signal that the thread has been asked to stop
+    """
     def stop(self):
         self.stoprequest.set()
 
     def _download_file(self, file):
         file.download(destdir=self.output_dir, retries=self.retries, checksum=True)
-        msg = "Thread {id}: Downloaded {file}!".format(id=self.id, file=file.name)
+        msg = "Thread {id}: Downloaded {file}".format(id=self.id, file=file.name)
         print(msg)
