@@ -36,7 +36,7 @@ class IAMetadataTransformer(MetadataTransformer):
         return "At Guelph; Volume {volume} Number {number}".format(volume=row['volume'], number=row['issue'])
 
     def _get_dc_subject(self, row):
-        return ['At Guelph', 'Campus news']
+        return ";".join(['At Guelph', 'Campus news'])
 
     def _get_dc_type(self, row):
         return "Newspaper"
