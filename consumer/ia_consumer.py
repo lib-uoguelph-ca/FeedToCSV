@@ -29,7 +29,7 @@ class IAConsumer(Consumer):
         for id in self.item_ids:
             item = self._get_item_metadata(id)
             transformed = self.transformer.transform(item)
-            #self.writer.write(transformed)
+            self.writer.write(transformed)
             self._download_files(id)
             # TODO: Write the metadata to a CSV file.
 
