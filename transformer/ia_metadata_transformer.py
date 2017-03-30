@@ -22,6 +22,7 @@ class IAMetadataTransformer(MetadataTransformer):
             'dc.source': 'identifier-access',
             'dc.subject': self._get_dc_subject,
             'dc.type': self._get_dc_type,
+            'files': self._get_files,
         }
     def _get_dc_contributor(self, row):
         return "Communications & Public Affairs"
@@ -40,3 +41,6 @@ class IAMetadataTransformer(MetadataTransformer):
 
     def _get_dc_type(self, row):
         return "Newspaper"
+
+    def _get_files(self, row):
+        return ";".join(row['files'])
