@@ -4,14 +4,23 @@ class MetadataTransformer:
     def __init__(self):
         self.mapping = {}
 
-    def transform(self, data: Iterable[ Mapping[str, Any] ]):
-        for row in data:
-            self._transform_row(row)
+    def transform(self, data):
+
+        try:
+            result = []
+
+            for row in data:
+                result.append(self._transform_row(row))
+
+        except TypeError:
+            result = self._transform_row(data)
+
+        return result
 
     def _transform_row(self, row):
         result = {}
 
-        for key in self.mapping():
+        for key in self.mapping:
             if callable(self.mapping[key]):
                 result[key] = self.mapping[key](row)
             elif isinstance(self.mapping[key], str):

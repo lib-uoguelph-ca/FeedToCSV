@@ -6,7 +6,8 @@ from downloader.ia_downloader_thread import IADownloaderThread
 class IAConsumer(Consumer):
 
     def __init__(self, transformer, writer, collection, num_threads=4, output_dir="output"):
-        #super().__init__(transformer, writer)
+        self.transformer = transformer
+        self.writer = writer
         self.collection = collection
         self.session = ia.get_session(config_file='ia.ini')
         self.item_ids = self._search()
@@ -27,8 +28,11 @@ class IAConsumer(Consumer):
     def process(self):
         for id in self.item_ids:
             item = self._get_item_metadata(id)
+            transformed = self.transformer.transform(item)
+            #self.writer.write(transformed)
             self._download_files(id)
             # TODO: Write the metadata to a CSV file.
+
         self._cleanup()
 
     def _cleanup(self):
