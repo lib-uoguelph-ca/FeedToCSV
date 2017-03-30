@@ -11,10 +11,9 @@ class IAConsumer(Consumer):
         self.collection = collection
         self.session = ia.get_session(config_file='ia.ini')
         self.item_ids = self._search()
+        self.item_ids.sort()
         self.num_threads = num_threads
         self.output_dir = output_dir
-        #TODO: Remove this...
-        self.item_ids = ['p1atguelphvol43uofg', 'p2atguelphvol43uofg']
         self.downloader = self._start_downloader(IADownloaderThread)
 
     # Instantiate threaded downloader

@@ -19,7 +19,6 @@ class IADownloaderThread(threading.Thread):
         # Essentially a synchronized flag that's set when the thread is asked to stop (join)
         self.stoprequest = threading.Event()
 
-
     def run(self):
         while not self.stoprequest.is_set():
             try:

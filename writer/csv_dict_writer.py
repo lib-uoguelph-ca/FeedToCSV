@@ -11,7 +11,8 @@ class CSVDictWriter(CSVWriter):
             new_file = True
 
         with open(self.out_file_path, 'a') as f:
-            fields = list(data.keys()).sort()
+            fields = list(data.keys())
+            fields.sort()
             writer = csv.DictWriter(f, fieldnames=fields)
 
             if new_file:
