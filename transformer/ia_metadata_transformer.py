@@ -39,3 +39,5 @@ class IAMetadataTransformer(MetadataTransformer):
     def _get_dc_type(self, row):
         return "Newspaper"
 
+    def _get_files(self, row):
+        return ";".join(row['files'])

@@ -32,6 +32,3 @@ class MetadataTransformer:
 
     def _get_empty(self, row):
         return ""
-
-    def _get_files(self, row):
-        return ";".join(row['files'])
