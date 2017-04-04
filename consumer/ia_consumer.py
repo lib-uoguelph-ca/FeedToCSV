@@ -5,9 +5,10 @@ from downloader.ia_downloader_thread import IADownloaderThread
 
 class IAConsumer(Consumer):
 
-    def __init__(self, transformer, writer, collection, num_threads=4, output_dir="output"):
+    def __init__(self, transformer, writer, logger, collection, num_threads=4, output_dir="output"):
         self.transformer = transformer
         self.writer = writer
+        self.logger = logger
         self.collection = collection
         self.session = ia.get_session(config_file='ia.ini')
         self.item_ids = self._search()
