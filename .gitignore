@@ -2,3 +2,4 @@ venv
 .idea
 ia.ini
 *.pyc
+input
