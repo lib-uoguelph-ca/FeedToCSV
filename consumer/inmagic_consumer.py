@@ -30,7 +30,7 @@ class InmagicConsumer(Consumer):
             item = self._get_item_metadata(node)
 
             transformed = self.transformer.transform(item)
-            #self.writer.write(transformed)
+            self.writer.write(transformed)
             #self.download_files(item)
 
     def _get_item_metadata(self, node):
