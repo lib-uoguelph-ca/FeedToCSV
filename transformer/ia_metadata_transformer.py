@@ -30,9 +30,6 @@ class IAMetadataTransformer(MetadataTransformer):
     def _get_uofg(self, row):
         return "University of Guelph"
 
-    def _get_empty(self, row):
-        return ""
-
     def _get_dc_relation_ispartofseries(self, row):
         return "At Guelph; Volume {volume} Number {number}".format(volume=row['volume'], number=row['issue'])
 
@@ -42,5 +39,3 @@ class IAMetadataTransformer(MetadataTransformer):
     def _get_dc_type(self, row):
         return "Newspaper"
 
-    def _get_files(self, row):
-        return ";".join(row['files'])

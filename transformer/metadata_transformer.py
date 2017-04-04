@@ -29,3 +29,9 @@ class MetadataTransformer:
                 raise KeyError("Metadata Transformer: Invalid mapping")
 
         return result
+
+    def _get_empty(self, row):
+        return ""
+
+    def _get_files(self, row):
+        return ";".join(row['files'])
