@@ -3,7 +3,7 @@ import queue
 
 """
 A downloader designed to work with the Internet Archive API.
-This thread impelents the pattern for stopping outlined here: 
+This thread implements the pattern for stopping outlined here: 
     http://eli.thegreenplace.net/2011/12/27/python-threads-communication-and-stopping
 """
 
