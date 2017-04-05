@@ -2,9 +2,6 @@ import os
 import threading
 import urllib.request
 import queue
-from time import sleep
-
-from queue import Queue
 
 """
  A generic downloader thread which draws from a queue of URLs to download.
@@ -22,15 +19,12 @@ class URLDownloaderThread(threading.Thread):
         self.id = id
 
     def run(self):
-        while not self.stoprequest.isSet():
-            # Check if we're supposed to stop
-            if self.stoprequest.is_set():
-                self.join()
-
+        while not self.stoprequest.is_set():
             try:
                 url = self.queue.get(timeout=0.5)
             except queue.Empty:
                 continue
+
             self._download_file(url)
 
             # send a signal to the queue that the job is done
@@ -65,7 +59,7 @@ When queue.empty() returns True, you're done downloading the files.
 
 class ThreadedDownloader:
     def __init__(self, num_threads=3, output_dir=None, thread_class=URLDownloaderThread):
-        self.queue = Queue()
+        self.queue = queue.Queue()
         self.num_threads = num_threads
         self.output_dir = output_dir
         self.threads = []
