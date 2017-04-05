@@ -33,8 +33,11 @@ class InmagicConsumer(Consumer):
 
             transformed = self.transformer.transform(item)
             self.writer.write(transformed)
-            self.download_file(transformed)
+            self._download_file(transformed)
 
+    """
+    Given a inm:Record node, build a dict with the metadata. 
+    """
     def _get_item_metadata(self, node):
         item = {}
         for child in node:
@@ -43,10 +46,16 @@ class InmagicConsumer(Consumer):
 
         return item
 
-    def download_file(self, item):
+    """
+    Download the file and store it in the output directory.
+    """
+    def _download_file(self, item):
         self._create_output_dirs(item)
         self._copy_file(item)
 
+    """
+    Create the directory structure required for the file in the output directory
+    """
     def _create_output_dirs(self, item):
         file_path = item['files']
         dir_path = os.path.dirname(file_path)
@@ -56,6 +65,9 @@ class InmagicConsumer(Consumer):
         if dir_path and not os.path.isdir(output_dir_path):
             os.makedirs(output_dir_path)
 
+    """
+    If the file doesn't exist already, copy the file to the output folder.
+    """
     def _copy_file(self, item):
         out_file_path = self.output_dir + os.sep + item['files']
         in_file_path = self.file_base_path + os.sep + item['files']
