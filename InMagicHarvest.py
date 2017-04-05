@@ -4,9 +4,15 @@ from transformer.inmagic_metadata_transformer import InmagicMetadataTransformer
 import logging
 
 logger = logging.getLogger('FeedToCSV')
-#logger.addHandler(logging.FileHandler('output/FeedToCSV.log'))
-logger.addHandler(logging.StreamHandler())
 logger.setLevel(logging.DEBUG)
+logger.addHandler(logging.StreamHandler())
+
+fh = logging.FileHandler('output/errors.log')
+fh.setLevel(logging.ERROR)
+logger.addHandler(fh)
+
+
+
 
 writer = CSVDictWriter('output/inmagic-atguelph.csv')
 transformer = InmagicMetadataTransformer()

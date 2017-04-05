@@ -50,6 +50,7 @@ class InmagicConsumer(Consumer):
     Download the file and store it in the output directory.
     """
     def _download_file(self, item):
+        self.logger.debug("Downloading file {}".format(item['files']))
         self._create_output_dirs(item)
         self._copy_file(item)
 
@@ -59,7 +60,6 @@ class InmagicConsumer(Consumer):
     def _create_output_dirs(self, item):
         file_path = item['files']
         dir_path = os.path.dirname(file_path)
-        print(dir_path)
 
         output_dir_path = self.output_dir + os.sep + dir_path
         if dir_path and not os.path.isdir(output_dir_path):
@@ -73,6 +73,7 @@ class InmagicConsumer(Consumer):
         in_file_path = self.file_base_path + os.sep + item['files']
 
         if os.path.exists(out_file_path):
+            self.logger.debug("Skipping {}: File exists".format(item['files']))
             return
 
         try:
