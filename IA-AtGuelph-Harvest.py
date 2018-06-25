@@ -1,6 +1,6 @@
 from consumer.ia_consumer import IAConsumer
 from writer.csv_dict_writer import CSVDictWriter
-from transformer.ia_metadata_transformer import IAMetadataTransformer
+from transformer.ia_atguelph_transformer import IAMetadataTransformer
 import logging
 
 # Set up logging
