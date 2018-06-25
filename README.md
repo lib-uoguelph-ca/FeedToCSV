@@ -16,3 +16,8 @@ Reusable components included here which might interest others:
 * A simple CSV file writer
 * A threaded downloader, which will pull URLs as they are added to a queue, and downloads the files concurrently
 * A transformer base class, which provides a pattern for defining crosswalks between metadata formats.
+
+## Internet Archive harvester
+In order to use this, you'll need to:
+* Sign up for an account
+* 
