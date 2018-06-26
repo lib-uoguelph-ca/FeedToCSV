@@ -24,7 +24,12 @@ class MetadataTransformer:
             if callable(self.mapping[key]):
                 result[key] = self.mapping[key](row)
             elif isinstance(self.mapping[key], str):
-                result[key] = row[self.mapping[key]]
+                try:
+                    result[key] = row[self.mapping[key]]
+
+                except KeyError:
+                    result[key] = ''
+
             else:
                 raise KeyError("Metadata Transformer: Invalid mapping")
 
