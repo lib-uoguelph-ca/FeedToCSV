@@ -1,5 +1,6 @@
 import threading
 import queue
+from requests.exceptions import ConnectionError as ce
 
 """
 A downloader designed to work with the Internet Archive API.
@@ -26,7 +27,13 @@ class IADownloaderThread(threading.Thread):
             except queue.Empty:
                 continue
 
-            self._download_file(file)
+            try:
+                self._download_file(file)
+            except Exception:
+                self.queue.task_done()
+                self.queue.put(file)
+                print("Requeue: {}".format(file.name))
+                continue
 
             # send a signal to the queue that the job is done
             self.queue.task_done()
