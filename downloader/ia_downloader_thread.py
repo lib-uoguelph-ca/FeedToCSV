@@ -12,11 +12,12 @@ This thread implements the pattern for stopping outlined here:
 class IADownloaderThread(threading.Thread):
     retries = 3
 
-    def __init__(self, id, queue, output_dir=None):
+    def __init__(self, id, queue, output_dir=None, logger=None):
         threading.Thread.__init__(self)
         self.queue = queue
         self.output_dir = output_dir
         self.id = id
+        self.logger = logger
         # Essentially a synchronized flag that's set when the thread is asked to stop (join)
         self.stoprequest = threading.Event()
 
@@ -32,7 +33,7 @@ class IADownloaderThread(threading.Thread):
             except Exception:
                 self.queue.task_done()
                 self.queue.put(file)
-                print("Requeue: {}".format(file.name))
+                self.logger.warn("Requeue: {}".format(file.name))
                 continue
 
             # send a signal to the queue that the job is done
@@ -47,4 +48,4 @@ class IADownloaderThread(threading.Thread):
     def _download_file(self, file):
         file.download(destdir=self.output_dir, retries=self.retries, checksum=True)
         msg = "Thread {id}: Downloaded {file}".format(id=self.id, file=file.name)
-        print(msg)
+        self.logger.debug(msg)

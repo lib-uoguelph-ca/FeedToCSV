@@ -10,13 +10,14 @@ import queue
 
 class URLDownloaderThread(threading.Thread):
 
-    def __init__(self, id, queue, output_dir=None):
+    def __init__(self, id, queue, output_dir=None, logger=None):
         """Initialize the thread"""
         threading.Thread.__init__(self)
         self.queue = queue
         self.output_dir = output_dir
         self.stoprequest = threading.Event()
         self.id = id
+        self.logger = logger
 
     def run(self):
         while not self.stoprequest.is_set():
@@ -25,7 +26,13 @@ class URLDownloaderThread(threading.Thread):
             except queue.Empty:
                 continue
 
-            self._download_file(url)
+            try:
+                self._download_file(url)
+            except Exception:
+                self.queue.task_done()
+                self.queue.put(file)
+                self.logger.warn("Requeue: {}".format(file.name))
+                continue
 
             # send a signal to the queue that the job is done
             self.queue.task_done()
@@ -48,7 +55,7 @@ class URLDownloaderThread(threading.Thread):
                     break
                 f.write(chunk)
         msg = "Finished downloading %s!" % url
-        print(msg)
+        self.logger.debug(msg)
 
 """
 A class to manage threaded downloading of files, drawn from a queue.
@@ -58,20 +65,22 @@ When queue.empty() returns True, you're done downloading the files.
 
 
 class ThreadedDownloader:
-    def __init__(self, num_threads=3, output_dir=None, thread_class=URLDownloaderThread):
+    def __init__(self, num_threads=3, output_dir=None, thread_class=URLDownloaderThread, logger=None):
         self.queue = queue.Queue()
         self.num_threads = num_threads
         self.output_dir = output_dir
         self.threads = []
         self.thread_class = thread_class
+        self.logger = logger
         self._init_threads()
+
 
     def get_queue(self):
         return self.queue
 
     def _init_threads(self):
         for i in range(self.num_threads):
-            thread = self.thread_class(i, self.queue, self.output_dir)
+            thread = self.thread_class(i, self.queue, self.output_dir, self.logger)
             self.threads.append(thread)
             thread.start()
 

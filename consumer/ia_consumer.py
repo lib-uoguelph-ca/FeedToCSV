@@ -19,7 +19,7 @@ class IAConsumer(Consumer):
 
     # Instantiate threaded downloader
     def _start_downloader(self, downloader_thread_class):
-        return ThreadedDownloader(num_threads=self.num_threads, thread_class=downloader_thread_class, output_dir=self.output_dir)
+        return ThreadedDownloader(num_threads=self.num_threads, thread_class=downloader_thread_class, output_dir=self.output_dir, logger=self.logger)
 
     # Iterate through the items,
     # * Build the metadata
