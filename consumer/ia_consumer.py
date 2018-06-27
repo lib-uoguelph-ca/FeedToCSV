@@ -31,7 +31,6 @@ class IAConsumer(Consumer):
             transformed = self.transformer.transform(item)
             self.writer.write(transformed)
             self._download_files(id)
-            # TODO: Write the metadata to a CSV file.
 
         self._cleanup()
 
