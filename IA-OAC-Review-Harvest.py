@@ -13,5 +13,5 @@ logger.addHandler(fh)
 
 writer = CSVDictWriter('output/harvest.csv')
 transformer = IAOACReviewTransformer()
-consumer = IAConsumer(transformer=transformer, writer=writer, logger=logger, collection='oac_review', num_threads=6)
+consumer = IAConsumer(transformer=transformer, writer=writer, logger=logger, collection='oac_review', num_threads=6, glob_pattern="*.pdf|*.zip")
 consumer.process()

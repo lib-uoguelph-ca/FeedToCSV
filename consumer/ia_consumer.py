@@ -5,7 +5,7 @@ from downloader.ia_downloader_thread import IADownloaderThread
 
 class IAConsumer(Consumer):
 
-    def __init__(self, transformer, writer, logger, collection, num_threads=4, output_dir="output"):
+    def __init__(self, transformer, writer, logger, collection, num_threads=4, output_dir="output", glob_pattern="*.pdf|*.txt"):
         self.transformer = transformer
         self.writer = writer
         self.logger = logger
@@ -15,6 +15,7 @@ class IAConsumer(Consumer):
         self.item_ids.sort()
         self.num_threads = num_threads
         self.output_dir = output_dir
+        self.glob_pattern = glob_pattern
         self.downloader = self._start_downloader(IADownloaderThread)
 
     # Instantiate threaded downloader
@@ -30,7 +31,7 @@ class IAConsumer(Consumer):
             item = self._get_item_metadata(id)
             transformed = self.transformer.transform(item)
             self.writer.write(transformed)
-            self._download_files(id)
+            self._download_files(id, self.glob_pattern)
 
         self._cleanup()
 
@@ -50,8 +51,8 @@ class IAConsumer(Consumer):
         return metadata
 
     # Download the files associated with an item.
-    def _download_files(self, item_id):
-        files = self._get_item_files(item_id)
+    def _download_files(self, item_id, glob_pattern="*.pdf|*.txt"):
+        files = self._get_item_files(item_id, glob_pattern)
         for file in files:
             self._download_file(file)
 

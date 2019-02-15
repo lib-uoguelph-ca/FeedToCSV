@@ -6,6 +6,7 @@ class IAOACReviewTransformer(MetadataTransformer):
         self.mapping = {
             'dc.title': 'title',
             'dc.creator': 'creator',
+            'dc.format': self._get_pdf_format,
             'dc.contributor': self._get_contributor,
             'dc.contributor.affiliation': self._get_contributor_affiliation,
             'dc.contributor.editor': 'editor',
@@ -23,6 +24,10 @@ class IAOACReviewTransformer(MetadataTransformer):
             'dc.type': 'type',
             'files': self._get_files,
         }
+
+    def get_pdf_format(self, row):
+        return "pdf"
+
     def _get_contributor(self, row):
         values = row['contributor'].split(',')
         return values[0]
