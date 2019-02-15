@@ -17,7 +17,12 @@ Reusable components included here which might interest others:
 * A threaded downloader, which will pull URLs as they are added to a queue, and downloads the files concurrently
 * A transformer base class, which provides a pattern for defining crosswalks between metadata formats.
 
+## Installation
+1. Clone this repository
+2. Install dependencies with `pip install -r requirements.txt`
+
 ## Internet Archive harvester
 In order to use this, you'll need to:
 * Sign up for an account
-* 
+* Generate the ia.ini file by running `ia --config-file './ia.ini' configure`.
+  Make sure the ia.ini file lives in the root of your repository.
